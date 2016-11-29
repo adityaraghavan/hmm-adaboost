@@ -14,5 +14,5 @@ private:
 	std::vector<std::vector<float>> A;
 	std::vector<std::vector<float>> B;
 	std::vector<std::vector<float>> PI;
-	int n, m;
+	int n, m; 
 };
