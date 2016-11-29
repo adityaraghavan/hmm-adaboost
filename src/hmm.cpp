@@ -3,11 +3,9 @@
 
 hmm::hmm(int n_states, int m_obsv_seq)
 {
-	
 	this->SetNumStates(n_states);
 
 	this->SetNumObsvSeq(m_obsv_seq);
-
 }
 
 int hmm::GetNumStates()
