@@ -29,6 +29,9 @@ class hmm {
 	void printStateTransition();
 	void printObsvProbab();
 	void printInitDist();
+	void printAlpha();
+	void printBeta();
+	void printGamma();
 
 	template<typename T>
 	friend std::ostream& operator<<(std::ostream& out, const std::vector<T>&);

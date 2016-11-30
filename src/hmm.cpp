@@ -77,20 +77,38 @@ void hmm::printInitDist()
 	std::cout << this->init_dist;
 }
 
+void hmm::printAlpha()
+{
+	std::cout << this->alpha;
+}
+
+void hmm::printBeta()
+{
+	std::cout << this->beta;
+}
+
+void hmm::printGamma()
+{
+	std::cout << this->gamma;
+}
+
 template<typename T>
 std::ostream & operator<<(std::ostream & out, const std::vector<T>& vec)
 {
+	out << "Vector: \n";
 	if (!vec.empty()) {
 		out << '[';
 		std::copy(vec.begin(), vec.end(), std::ostream_iterator<T>(out, ", "));
 		out << "\b\b]";
 	}
+	out << "\n";
 	return out;
 }
 
 template<typename T>
 std::ostream & operator<<(std::ostream & out, const std::vector<std::vector<T>>& vec)
 {
+	out << "Vector: \n";
 	for (int i = 0; i < vec.size(); i++)
 	{
 		if (!vec[i].empty()) {
@@ -100,24 +118,23 @@ std::ostream & operator<<(std::ostream & out, const std::vector<std::vector<T>>&
 		}
 		out << "\n";
 	}
-	
 	return out;
 }
 
 void hmm::ForwardAlgorithm(const std::vector<int>& obsv)
 {
-	std::vector<double> row;
-	int temp;
+	//initialize scale
+	this->scale.resize(obsv.size(), 0);
+
+	//initialize alpha
+	this->alpha.resize(obsv.size(), std::vector<double>(this->num_states, 0));
 
 	// Compute alpha(0)
 	for (int i = 0; i < this->num_states; i++)
 	{
-		temp = this->init_dist.at(i) * this->obsv_probab[i][obsv[0]];
-		row.push_back(temp);
-		this->scale[0] = this->scale[0] + temp;
+		this->alpha[0][i] = this->init_dist.at(i) * this->obsv_probab[i][obsv[0]];
+		this->scale[0] = this->scale[0] + this->alpha[0][i];
 	}
-
-	this->alpha.push_back(row);
 	
 	//scale alpha(0)(i)
 	this->scale[0] = 1 / this->scale[0];
@@ -129,29 +146,23 @@ void hmm::ForwardAlgorithm(const std::vector<int>& obsv)
 	// Calculate alpha(t)
 	for (int t = 1; t < obsv.size(); t++)
 	{
-		row.clear();
-
 		for (int i = 0; i < this->num_states; i++)
 		{
-			double sum = 0;
+			this->alpha[t][i] = 0;
 
 			for (int j = 0; j < this->num_states; j++)
 			{
-				sum = sum + alpha[t - 1][j] * this->state_trasition[j][i];
+				this->alpha[t][i] = this->alpha[t][i] + this->alpha[t - 1][j] * this->state_trasition[j][i];
 			}
 
-			sum = sum * this->obsv_probab[i][obsv[t]];
-			this->scale[t] = this->scale[t] + alpha[t][i];
+			this->alpha[t][i] = this->alpha[t][i] * this->obsv_probab[i][obsv[t]];
+			this->scale[t] = this->scale[t] + this->alpha[t][i];
+		}		
 
-			row.push_back(sum);
-		}
-
-		alpha.push_back(row);
-		
 		this->scale[t] = 1 / this->scale[t];
 		for (int i = 0; i < this->num_states; i++)
 		{
-			alpha[t][i] = this->scale[t] * alpha[t][i];
+			this->alpha[t][i] = this->scale[t] * this->alpha[t][i];
 		}
 
 	}
