@@ -43,6 +43,21 @@ int hmm::getNumObsvSeq()
 	return this->num_obsv_seq;
 }
 
+void hmm::setInitDist(const std::vector<float>& pi)
+{
+	this->init_dist = pi;
+}
+
+void hmm::setStateTrans(const std::vector<std::vector<float>>& A)
+{
+	this->state_trasition = A;
+}
+
+void hmm::setObsvProbab(const std::vector<std::vector<float>>& B)
+{
+	this->obsv_probab = B;
+}
+
 void hmm::printStateTransition()
 {
 	std::cout << this->state_trasition;
