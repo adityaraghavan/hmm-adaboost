@@ -35,6 +35,7 @@ class hmm {
 	void ForwardAlgorithm(const std::vector<int> &);
 	void BackwardAlgorithm(const std::vector<int> &);
 	void CalculateGammas(const std::vector<int> &);
+	void Restimate(const std::vector<int> &);
 
  private:
 	std::vector<std::vector<float>> state_trasition;

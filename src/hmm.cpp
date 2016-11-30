@@ -206,3 +206,52 @@ void hmm::CalculateGammas(const std::vector<int>& obsv)
 		this->gamma[obsv.size() - 1][i] = alpha[obsv.size() - 1][i] / denom;
 	}
 }
+
+void hmm::Restimate(const std::vector<int>& obsv)
+{
+	float numer, denom;
+
+	// restimate initial distribution
+	for (int i = 0; i < this->num_states; i++)
+	{
+		this->init_dist[i] = this->gamma[0][i];
+	}
+
+	//re-estimate state transition probability
+	for (int i = 0; i < this->num_states; i++)
+	{
+		for (int j = 0; j < this->num_states; j++)
+		{
+			numer = 0;
+			denom = 0;
+
+			for (int t = 0; t < obsv.size() - 1; t++)
+			{
+				numer = numer + this->digamma[t][i][j];
+				denom = denom + this->gamma[t][i];
+			}
+			this->state_trasition[i][j] = numer / denom;
+		}
+	}
+
+	//re-estimate observation probability
+	for (int i = 0; i < this->num_states; i++)
+	{
+		for (int j = 0; j < this->num_obsv_seq; j++)
+		{
+			numer = 0;
+			denom = 0;
+
+			for (int t = 0; t < obsv.size(); t++)
+			{
+				if (obsv[t] == j)
+				{
+					numer = numer + this->gamma[t][i];
+				}
+				denom = denom + this->gamma[t][i];
+			}
+
+			this->obsv_probab[i][j] = numer / denom;
+		}
+	}
+}
