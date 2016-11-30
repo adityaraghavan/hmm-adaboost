@@ -1,19 +1,32 @@
 #include "hmm.h"
 #include <iostream>
+#include <iterator>
 
 hmm::hmm(int n_states, int m_obsv_seq)
 {
-	this->SetNumStates(n_states);
+	this->setNumStates(n_states);
 
-	this->SetNumObsvSeq(m_obsv_seq);
+	this->setNumObsvSeq(m_obsv_seq);
 }
 
-int hmm::GetNumStates()
+void hmm::setNumStates(int n_states)
+{
+	if (n_states > 0)
+	{
+		this->num_states = n_states;
+	}
+	else
+	{
+		this->num_states = 0;
+	}
+}
+
+int hmm::getNumStates()
 {
 	return this->num_states;
 }
 
-void hmm::SetNumObsvSeq(int n_obsv_seq)
+void hmm::setNumObsvSeq(int n_obsv_seq)
 {
 	if (n_obsv_seq > 0)
 	{
@@ -25,47 +38,87 @@ void hmm::SetNumObsvSeq(int n_obsv_seq)
 	}
 }
 
-int hmm::GetNumObsvSeq()
+int hmm::getNumObsvSeq()
 {
 	return this->num_obsv_seq;
 }
 
-void hmm::PrintStateTransition()
+void hmm::printStateTransition()
 {
-	PrintTwoDimVector(this->state_trasition);
+	std::cout << this->state_trasition;
 }
 
-void hmm::PrintObsvProbab()
+void hmm::printObsvProbab()
 {
-	PrintTwoDimVector(this->obsv_probab);
+	std::cout << this->obsv_probab;
 }
 
-void hmm::PrintInitDist()
+void hmm::printInitDist()
 {
-	PrintTwoDimVector(this->init_dist);
+	std::cout << this->init_dist;
 }
 
-void hmm::PrintTwoDimVector(const std::vector<std::vector<float>>& vec)
+template<typename T>
+std::ostream & operator<<(std::ostream & out, const std::vector<T>& vec)
+{
+	if (!vec.empty()) {
+		out << '[';
+		std::copy(vec.begin(), vec.end(), std::ostream_iterator<T>(out, ", "));
+		out << "\b\b]";
+	}
+	return out;
+}
+
+template<typename T>
+std::ostream & operator<<(std::ostream & out, const std::vector<std::vector<T>>& vec)
 {
 	for (int i = 0; i < vec.size(); i++)
 	{
-		for (int j = 0; j < vec[i].size(); j++)
+		if (!vec[i].empty()) {
+			out << '[';
+			std::copy(vec[i].begin(), vec[i].end(), std::ostream_iterator<T>(out, ", "));
+			out << "\b\b]";
+		}
+		out << "\n";
+	}
+	
+	return out;
+}
+
+void hmm::ForwardAlgorithm(const std::vector<int>& obsv)
+{
+	std::vector<float> row;
+	int temp;
+
+	// Initialize alpha0
+	for (int i = 0; i < this->num_states; i++)
+	{
+		temp = this->init_dist.at(i) * this->obsv_probab[i][obsv[0]];
+		row.push_back(temp);
+	}
+	
+	this->alpha.push_back(row);
+
+	for (int t = 1; t < obsv.size(); t++)
+	{
+		row.clear();
+
+		for (int i = 0; i < this->num_states; i++)
 		{
-			std::cout << vec[i][j] << " ";
+			float sum = 0;
+
+			for (int j = 0; j < this->num_states; j++)
+			{
+				sum = sum + alpha[t - 1][j] * this->state_trasition[j][i];
+			}
+
+			sum = sum * this->obsv_probab[i][obsv[t]];
+
+			row.push_back(sum);
 		}
 
-		std::cout << "\n";
+		alpha.push_back(row);
 	}
 }
 
-void hmm::SetNumStates(int n_states)
-{
-	if (n_states > 0)
-	{
-		this->num_states = n_states;
-	}
-	else
-	{
-		this->num_states = 0;
-	}
-}
+
