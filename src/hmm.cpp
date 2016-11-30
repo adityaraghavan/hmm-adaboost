@@ -90,15 +90,24 @@ void hmm::ForwardAlgorithm(const std::vector<int>& obsv)
 	std::vector<float> row;
 	int temp;
 
-	// Initialize alpha0
+	// Compute alpha(0)
 	for (int i = 0; i < this->num_states; i++)
 	{
 		temp = this->init_dist.at(i) * this->obsv_probab[i][obsv[0]];
 		row.push_back(temp);
+		this->scale[0] = this->scale[0] + temp;
 	}
-	
-	this->alpha.push_back(row);
 
+	this->alpha.push_back(row);
+	
+	//scale alpha(0)(i)
+	this->scale[0] = 1 / this->scale[0];
+	for (int i = 0; i < this->num_states; i++)
+	{
+		this->alpha[0][i] = this->scale[0] * this->alpha[0][i];
+	}
+
+	// Calculate alpha(t)
 	for (int t = 1; t < obsv.size(); t++)
 	{
 		row.clear();
@@ -113,11 +122,19 @@ void hmm::ForwardAlgorithm(const std::vector<int>& obsv)
 			}
 
 			sum = sum * this->obsv_probab[i][obsv[t]];
+			this->scale[t] = this->scale[t] + alpha[t][i];
 
 			row.push_back(sum);
 		}
 
 		alpha.push_back(row);
+		
+		this->scale[t] = 1 / this->scale[t];
+		for (int i = 0; i < this->num_states; i++)
+		{
+			alpha[t][i] = this->scale[t] * alpha[t][i];
+		}
+
 	}
 }
 
@@ -125,29 +142,26 @@ void hmm::BackwardAlgorithm(const std::vector<int>& obsv)
 {
 	std::vector<float> row;
 
+	//resize beta
+	this->beta.resize(obsv.size(), std::vector<float> (this->num_states, 0));
+
+	// Initialize and scale beta(T-1)
 	for (int i = 0; i < this->num_states; i++)
 	{
-		row.push_back(1);
+		this->beta[obsv.size() - 1][i] = this->scale[obsv.size() - 1];
 	}
 
-	this->beta.push_back(row);
-
+	// Calculate beta values
 	for (int t = obsv.size() - 2; t >= 0; t--)
 	{
-		row.clear();
-
 		for (int i = 0; i < this->num_states; i++)
 		{
-			float sum = 0;
-
 			for (int j = 0; j < this->num_states; j++)
 			{
-				sum = sum + (this->state_trasition[i][j] * this->obsv_probab[j][obsv[t + 1]] * this->beta[t + 1][j]);
+				this->beta[t][i] = this->beta[t][i] + (this->state_trasition[i][j] * this->obsv_probab[j][obsv[t + 1]] * this->beta[t + 1][j]);
 			}
 
-			row.push_back(sum);
+			this->beta[t][i] = this->scale[t] * this->beta[t][i];
 		}
-
-		this->beta.insert(this->beta.begin(), row);
 	}
 }

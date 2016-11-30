@@ -9,7 +9,7 @@ class hmm {
  public:
 	std::vector<std::vector<float>> alpha;
 	std::vector<std::vector<float>> beta;
-	std::vector<float> scaling;
+	std::vector<float> scale;
 	std::vector<int> obsv_symb;
 
 	hmm();
