@@ -54,18 +54,23 @@ void main()
 	obj.setStateTrans(pstate);
 	obj.setObsvProbab(pobsv);
 	
-	boost::progress_display progress(100);
+	boost::progress_display progress(200);
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 200; i++)
 	{
 		obj.ForwardAlgorithm(obsv);
-		obj.BackwardAlgorithm(obsv);
-		obj.CalculateGammas(obsv);
-		obj.Restimate(obsv);
-		obj.printStateTransition();
+		//obj.BackwardAlgorithm(obsv);
+		//obj.CalculateGammas(obsv);
+		//obj.Restimate(obsv);
 		++progress;
 	}
 	
+	ofstream out("out.txt");
+	std::streambuf *coutbuf = std::cout.rdbuf(); //save old buf
+	std::cout.rdbuf(out.rdbuf());
 	obj.printInitDist();
+	obj.printStateTransition();
 	obj.printObsvProbab();
+	getchar();
+	//cout << "";
 }

@@ -139,7 +139,7 @@ void hmm::ForwardAlgorithm(const std::vector<int>& obsv)
 	//scale alpha(0)(i)
 	this->scale[0] = 1 / this->scale[0];
 	for (int i = 0; i < this->num_states; i++)
-{	
+	{	
 		this->alpha[0][i] = this->scale[0] * this->alpha[0][i];
 	}
 
@@ -148,7 +148,7 @@ void hmm::ForwardAlgorithm(const std::vector<int>& obsv)
 	{
 		for (int i = 0; i < this->num_states; i++)
 		{
-			this->alpha[t][i] = 0;
+			//this->alpha[t][i] = 0;
 
 			for (int j = 0; j < this->num_states; j++)
 			{
@@ -211,7 +211,9 @@ void hmm::CalculateGammas(const std::vector<int>& obsv)
 				denom = denom + this->alpha[t][i] * this->state_trasition[i][j] * this->obsv_probab[j][obsv[t+1]] * this->beta[t+1][j];
 			}
 		}
-
+		if (denom == 0) {
+			std::cout << denom << std::endl;
+		}
 		for (int i = 0; i < this->num_states; i++)
 		{
 			this->gamma[t][i] = 0;
@@ -219,6 +221,7 @@ void hmm::CalculateGammas(const std::vector<int>& obsv)
 			{
 				this->digamma[t][i][j] = (this->alpha[t][i] * this->state_trasition[i][j] * this->obsv_probab[j][obsv[t + 1]] * this->beta[t + 1][j]);
 				this->digamma[t][i][j] = this->digamma[t][i][j] / denom;
+				this->gamma[t][i] = this->gamma[t][i] + this->digamma[t][i][j];
 			}
 		}
 	}
