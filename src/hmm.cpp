@@ -165,3 +165,44 @@ void hmm::BackwardAlgorithm(const std::vector<int>& obsv)
 		}
 	}
 }
+
+void hmm::CalculateGammas(const std::vector<int>& obsv)
+{
+	this->gamma.resize(obsv.size(), std::vector<float>(this->num_states, 0));
+	this->digamma.resize(obsv.size(), std::vector<std::vector<float>>(this->num_states, std::vector<float>(this->num_states, 0)));
+	float denom = 0;
+
+	for (int t = 0; t < obsv.size()-1; t++)
+	{
+		denom = 0;
+
+		for (int i = 0; i < this->num_states; i++)
+		{
+			for (int j = 0; j < this->num_states; j++)
+			{
+				denom = denom + this->alpha[t][i] * this->state_trasition[i][j] * this->obsv_probab[j][obsv[t+1]] * this->beta[t+1][j];
+			}
+		}
+
+		for (int i = 0; i < this->num_states; i++)
+		{
+			this->gamma[t][i] = 0;
+			for (int j = 0; j < this->num_states; j++)
+			{
+				this->digamma[t][i][j] = (this->alpha[t][i] * this->state_trasition[i][j] * this->obsv_probab[j][obsv[t + 1]] * this->beta[t + 1][j]);
+				this->digamma[t][i][j] = this->digamma[t][i][j] / denom;
+			}
+		}
+	}
+
+	//special case for gamma(T-1)(i)
+	denom = 0;
+	for (int i = 0; i < this->num_states; i++)
+	{
+		denom = denom + alpha[obsv.size() - 1][i];
+	}
+	for (int i = 0; i < this->num_states; i++)
+	{
+		this->gamma[obsv.size() - 1][i] = alpha[obsv.size() - 1][i] / denom;
+	}
+}

@@ -9,6 +9,8 @@ class hmm {
  public:
 	std::vector<std::vector<float>> alpha;
 	std::vector<std::vector<float>> beta;
+	std::vector<std::vector<float>> gamma;
+	std::vector<std::vector<std::vector<float>>> digamma;
 	std::vector<float> scale;
 	std::vector<int> obsv_symb;
 
@@ -32,6 +34,7 @@ class hmm {
 	
 	void ForwardAlgorithm(const std::vector<int> &);
 	void BackwardAlgorithm(const std::vector<int> &);
+	void CalculateGammas(const std::vector<int> &);
 
  private:
 	std::vector<std::vector<float>> state_trasition;
