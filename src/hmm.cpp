@@ -9,6 +9,10 @@ hmm::hmm(int n_states, int m_obsv_seq)
 	this->setNumObsvSeq(m_obsv_seq);
 }
 
+hmm::~hmm()
+{
+}
+
 void hmm::setNumStates(int n_states)
 {
 	if (n_states > 0)
@@ -43,17 +47,17 @@ int hmm::getNumObsvSeq()
 	return this->num_obsv_seq;
 }
 
-void hmm::setInitDist(const std::vector<float>& pi)
+void hmm::setInitDist(const std::vector<double>& pi)
 {
 	this->init_dist = pi;
 }
 
-void hmm::setStateTrans(const std::vector<std::vector<float>>& A)
+void hmm::setStateTrans(const std::vector<std::vector<double>>& A)
 {
 	this->state_trasition = A;
 }
 
-void hmm::setObsvProbab(const std::vector<std::vector<float>>& B)
+void hmm::setObsvProbab(const std::vector<std::vector<double>>& B)
 {
 	this->obsv_probab = B;
 }
@@ -102,7 +106,7 @@ std::ostream & operator<<(std::ostream & out, const std::vector<std::vector<T>>&
 
 void hmm::ForwardAlgorithm(const std::vector<int>& obsv)
 {
-	std::vector<float> row;
+	std::vector<double> row;
 	int temp;
 
 	// Compute alpha(0)
@@ -129,7 +133,7 @@ void hmm::ForwardAlgorithm(const std::vector<int>& obsv)
 
 		for (int i = 0; i < this->num_states; i++)
 		{
-			float sum = 0;
+			double sum = 0;
 
 			for (int j = 0; j < this->num_states; j++)
 			{
@@ -155,10 +159,10 @@ void hmm::ForwardAlgorithm(const std::vector<int>& obsv)
 
 void hmm::BackwardAlgorithm(const std::vector<int>& obsv)
 {
-	std::vector<float> row;
+	std::vector<double> row;
 
 	//resize beta
-	this->beta.resize(obsv.size(), std::vector<float> (this->num_states, 0));
+	this->beta.resize(obsv.size(), std::vector<double> (this->num_states, 0));
 
 	// Initialize and scale beta(T-1)
 	for (int i = 0; i < this->num_states; i++)
@@ -183,9 +187,9 @@ void hmm::BackwardAlgorithm(const std::vector<int>& obsv)
 
 void hmm::CalculateGammas(const std::vector<int>& obsv)
 {
-	this->gamma.resize(obsv.size(), std::vector<float>(this->num_states, 0));
-	this->digamma.resize(obsv.size(), std::vector<std::vector<float>>(this->num_states, std::vector<float>(this->num_states, 0)));
-	float denom = 0;
+	this->gamma.resize(obsv.size(), std::vector<double>(this->num_states, 0));
+	this->digamma.resize(obsv.size(), std::vector<std::vector<double>>(this->num_states, std::vector<double>(this->num_states, 0)));
+	double denom = 0;
 
 	for (int t = 0; t < obsv.size()-1; t++)
 	{
@@ -224,7 +228,7 @@ void hmm::CalculateGammas(const std::vector<int>& obsv)
 
 void hmm::Restimate(const std::vector<int>& obsv)
 {
-	float numer, denom;
+	double numer, denom;
 
 	// restimate initial distribution
 	for (int i = 0; i < this->num_states; i++)

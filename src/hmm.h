@@ -7,11 +7,11 @@
 
 class hmm {
  public:
-	std::vector<std::vector<float>> alpha;
-	std::vector<std::vector<float>> beta;
-	std::vector<std::vector<float>> gamma;
-	std::vector<std::vector<std::vector<float>>> digamma;
-	std::vector<float> scale;
+	std::vector<std::vector<double>> alpha;
+	std::vector<std::vector<double>> beta;
+	std::vector<std::vector<double>> gamma;
+	std::vector<std::vector<std::vector<double>>> digamma;
+	std::vector<double> scale;
 	std::vector<int> obsv_symb;
 
 	hmm();
@@ -22,9 +22,9 @@ class hmm {
 	int getNumStates();
 	void setNumObsvSeq(int /*num_obsv_seq*/);
 	int getNumObsvSeq();
-	void setInitDist(const std::vector<float> & /*init_dist*/);
-	void setStateTrans(const std::vector<std::vector<float>> & /*state_transition*/);
-	void setObsvProbab(const std::vector<std::vector<float>> & /*obsv_probab*/);
+	void setInitDist(const std::vector<double> & /*init_dist*/);
+	void setStateTrans(const std::vector<std::vector<double>> & /*state_transition*/);
+	void setObsvProbab(const std::vector<std::vector<double>> & /*obsv_probab*/);
 
 	void printStateTransition();
 	void printObsvProbab();
@@ -42,9 +42,9 @@ class hmm {
 	void Restimate(const std::vector<int> &);
 
  private:
-	std::vector<std::vector<float>> state_trasition;
-	std::vector<std::vector<float>> obsv_probab;
-	std::vector<float> init_dist;
+	std::vector<std::vector<double>> state_trasition;
+	std::vector<std::vector<double>> obsv_probab;
+	std::vector<double> init_dist;
 	int num_states, num_obsv_seq; 
 };
 
