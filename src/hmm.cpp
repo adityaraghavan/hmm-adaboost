@@ -47,17 +47,17 @@ int hmm::getNumObsvSeq()
 	return this->num_obsv_seq;
 }
 
-void hmm::setInitDist(const std::vector<double>& pi)
+void hmm::setInitDist(std::vector<double> pi)
 {
 	this->init_dist = pi;
 }
 
-void hmm::setStateTrans(const std::vector<std::vector<double>>& A)
+void hmm::setStateTrans(std::vector<std::vector<double>> A)
 {
 	this->state_trasition = A;
 }
 
-void hmm::setObsvProbab(const std::vector<std::vector<double>>& B)
+void hmm::setObsvProbab(std::vector<std::vector<double>> B)
 {
 	this->obsv_probab = B;
 }
@@ -125,7 +125,7 @@ void hmm::ForwardAlgorithm(const std::vector<int>& obsv)
 {
 	//initialize scale
 	this->scale.resize(obsv.size(), 0);
-
+	
 	//initialize alpha
 	this->alpha.resize(obsv.size(), std::vector<double>(this->num_states, 0));
 
@@ -139,7 +139,7 @@ void hmm::ForwardAlgorithm(const std::vector<int>& obsv)
 	//scale alpha(0)(i)
 	this->scale[0] = 1 / this->scale[0];
 	for (int i = 0; i < this->num_states; i++)
-	{
+{	
 		this->alpha[0][i] = this->scale[0] * this->alpha[0][i];
 	}
 
@@ -170,8 +170,6 @@ void hmm::ForwardAlgorithm(const std::vector<int>& obsv)
 
 void hmm::BackwardAlgorithm(const std::vector<int>& obsv)
 {
-	std::vector<double> row;
-
 	//resize beta
 	this->beta.resize(obsv.size(), std::vector<double> (this->num_states, 0));
 
@@ -229,18 +227,17 @@ void hmm::CalculateGammas(const std::vector<int>& obsv)
 	denom = 0;
 	for (int i = 0; i < this->num_states; i++)
 	{
-		denom = denom + alpha[obsv.size() - 1][i];
+		denom = denom + this->alpha[obsv.size() - 1][i];
 	}
 	for (int i = 0; i < this->num_states; i++)
 	{
-		this->gamma[obsv.size() - 1][i] = alpha[obsv.size() - 1][i] / denom;
+		this->gamma[obsv.size() - 1][i] = this->alpha[obsv.size() - 1][i] / denom;
 	}
 }
 
 void hmm::Restimate(const std::vector<int>& obsv)
 {
 	double numer, denom;
-
 	// restimate initial distribution
 	for (int i = 0; i < this->num_states; i++)
 	{

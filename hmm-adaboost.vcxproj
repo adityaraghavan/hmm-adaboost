@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="lib\boost\progress.hpp" />
     <ClInclude Include="src\hmm.h" />
   </ItemGroup>
   <ItemGroup>

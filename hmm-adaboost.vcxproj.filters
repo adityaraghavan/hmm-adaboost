@@ -18,6 +18,9 @@
     <ClInclude Include="src\hmm.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="lib\boost\progress.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hmm.cpp">

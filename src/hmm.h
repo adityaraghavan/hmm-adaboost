@@ -22,9 +22,9 @@ class hmm {
 	int getNumStates();
 	void setNumObsvSeq(int /*num_obsv_seq*/);
 	int getNumObsvSeq();
-	void setInitDist(const std::vector<double> & /*init_dist*/);
-	void setStateTrans(const std::vector<std::vector<double>> & /*state_transition*/);
-	void setObsvProbab(const std::vector<std::vector<double>> & /*obsv_probab*/);
+	void setInitDist(std::vector<double>/*init_dist*/);
+	void setStateTrans(std::vector<std::vector<double>>/*state_transition*/);
+	void setObsvProbab(std::vector<std::vector<double>>/*obsv_probab*/);
 
 	void printStateTransition();
 	void printObsvProbab();
