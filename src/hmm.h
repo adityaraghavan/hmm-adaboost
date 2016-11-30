@@ -8,7 +8,7 @@
 class hmm {
  public:
 	std::vector<std::vector<float>> alpha;
-	std::vector<float> beta;
+	std::vector<std::vector<float>> beta;
 	std::vector<float> scaling;
 	std::vector<int> obsv_symb;
 
@@ -31,7 +31,7 @@ class hmm {
 	friend std::ostream& operator<<(std::ostream& out, const std::vector<std::vector<T>>&);
 	
 	void ForwardAlgorithm(const std::vector<int> &);
-	//void BackwardAlgorithm(const std::vector<int> &);
+	void BackwardAlgorithm(const std::vector<int> &);
 
  private:
 	std::vector<std::vector<float>> state_trasition;

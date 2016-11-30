@@ -121,4 +121,33 @@ void hmm::ForwardAlgorithm(const std::vector<int>& obsv)
 	}
 }
 
+void hmm::BackwardAlgorithm(const std::vector<int>& obsv)
+{
+	std::vector<float> row;
 
+	for (int i = 0; i < this->num_states; i++)
+	{
+		row.push_back(1);
+	}
+
+	this->beta.push_back(row);
+
+	for (int t = obsv.size() - 2; t >= 0; t--)
+	{
+		row.clear();
+
+		for (int i = 0; i < this->num_states; i++)
+		{
+			float sum = 0;
+
+			for (int j = 0; j < this->num_states; j++)
+			{
+				sum = sum + (this->state_trasition[i][j] * this->obsv_probab[j][obsv[t + 1]] * this->beta[t + 1][j]);
+			}
+
+			row.push_back(sum);
+		}
+
+		this->beta.insert(this->beta.begin(), row);
+	}
+}
