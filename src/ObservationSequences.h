@@ -6,19 +6,26 @@ class ObservationSequences
 {
 
 public:
-	std::string malwareFamilyName;
 	~ObservationSequences();
 	ObservationSequences(std::string);
-	void getFileList();
-	void getFileStream();
 
 	int noOfFiles;
-	int noOfTrainingFiles;
-	int noOfScoringFiles;
-
-private:
-	std::vector<std::vector<int>> obsSequenceList;
-	std::vector<std::string> distinctOpCodesList;
+	std::string malwareFamilyName;
+	std::string parentFolderPath;
 	
+	void getFileList();
 	std::vector<std::string> fileNameList;
+
+	void getFileStream();
+	std::vector<std::string> distinctOpCodesList;
+
+	void getTrainingData();
+	std::vector<int> trainingData;
+
+	void getScoringData();
+	std::vector<std::vector<int>> malwareData;
+
+	void addBenignData();
+	void getBenignData(std::string);
+	std::vector<std::vector<int>> benignData;
 };
