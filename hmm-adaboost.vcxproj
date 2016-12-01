@@ -19,14 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="lib\config.hpp" />
-    <ClInclude Include="lib\convenience.hpp" />
-    <ClInclude Include="lib\exception.hpp" />
-    <ClInclude Include="lib\fstream.hpp" />
-    <ClInclude Include="lib\operations.hpp" />
-    <ClInclude Include="lib\path.hpp" />
-    <ClInclude Include="lib\path_traits.hpp" />
-    <ClInclude Include="lib\string_file.hpp" />
     <ClInclude Include="src\hmm.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -35,6 +27,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ObservationSequences.cpp" />
+    <ClInclude Include="lib\boost\progress.hpp" />
+    <ClInclude Include="src\hmm.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\hmm.cpp" />
+    <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -95,7 +93,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.\src;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\SJSU\Sem 1\CS 266\Project\hmm-adaboost\packages\boost.1.62.0.0\lib\native\include\boost;D:\SJSU\Sem 1\CS 266\Project\hmm-adaboost\packages\boost_filesystem-vc140.1.62.0.0\lib\native\address-model-32\lib;.\src;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
