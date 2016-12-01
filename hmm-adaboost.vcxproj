@@ -19,16 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\hmm.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="src\ObservationSequences.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ObservationSequences.cpp" />
     <ClInclude Include="lib\boost\progress.hpp" />
-    <ClInclude Include="src\hmm.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hmm.cpp" />
@@ -120,7 +115,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>D:\Aditya\CS_266\Project\hmm-adaboost\packages\boost_system-vc140.1.61.0.0\lib\native\address-model-32;D:\Aditya\CS_266\Project\hmm-adaboost\packages\boost_filesystem-vc140.1.61.0.0\lib\native\address-model-32;D:\Aditya\CS_266\Project\hmm-adaboost\packages\boost.1.61.0.0\lib\native\include\boost</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\src;.\packages\boost_system-vc140.1.61.0.0\lib\native\address-model-32;.\packages\boost_filesystem-vc140.1.61.0.0\lib\native\address-model-32;.\packages\boost.1.61.0.0\lib\native\include\boost</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

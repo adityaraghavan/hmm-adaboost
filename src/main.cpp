@@ -13,6 +13,16 @@ void main()
 	vector<double> init = { 0.51316, 0.48684 };
 	vector<int> obsv;
 
+	/*
+	cout << "Enter Malware Family Name - ";
+	string malwareName;
+	cin >> malwareName;
+	ObservationSequences obj(malwareName);
+	obj.getFileList();
+	obj.getFileStream();
+	return 0;
+	*/
+
 	ifstream input("input/brown.txt");
 
 	char c;
