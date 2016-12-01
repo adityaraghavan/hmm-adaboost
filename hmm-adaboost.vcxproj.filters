@@ -18,6 +18,9 @@
     <ClInclude Include="src\ObservationSequences.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\hmm.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ObservationSequences.cpp">

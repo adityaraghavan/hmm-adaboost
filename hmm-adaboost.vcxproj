@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\hmm.h" />
     <ClInclude Include="src\ObservationSequences.h" />
   </ItemGroup>
   <ItemGroup>
