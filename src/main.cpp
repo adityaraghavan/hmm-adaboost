@@ -59,9 +59,9 @@ void main()
 	for (int i = 0; i < 200; i++)
 	{
 		obj.ForwardAlgorithm(obsv);
-		//obj.BackwardAlgorithm(obsv);
-		//obj.CalculateGammas(obsv);
-		//obj.Restimate(obsv);
+		obj.BackwardAlgorithm(obsv);
+		obj.CalculateGammas(obsv);
+		obj.Restimate(obsv);
 		++progress;
 	}
 	
