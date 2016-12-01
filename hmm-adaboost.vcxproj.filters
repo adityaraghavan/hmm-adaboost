@@ -18,10 +18,40 @@
     <ClInclude Include="src\hmm.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\ObservationSequences.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\config.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\convenience.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\exception.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\fstream.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\operations.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\path.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\path_traits.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\string_file.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="hmm.cpp">
+    <ClCompile Include="src\ObservationSequences.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
