@@ -15,45 +15,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\hmm.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\ObservationSequences.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib\config.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib\convenience.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib\exception.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib\fstream.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib\operations.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib\path.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib\path_traits.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib\string_file.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ObservationSequences.cpp">
-	<Filter>Source Files</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\boost\progress.hpp">
-    <Filter>Header Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -61,8 +34,8 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\main.cpp">
-    <Filter>Source Files</Filter>
-    </ClCompile>  
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

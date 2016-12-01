@@ -21,18 +21,6 @@ ObservationSequences::ObservationSequences(std::string folderName)
 	this->malwareFamilyName = folderName;
 }
 
-int main() 
-{
-
-	cout << "Enter Malware Family Name - ";
-	string malwareName;
-	cin >> malwareName;
-	ObservationSequences obj(malwareName);
-	obj.getFileList();
-	obj.getFileStream();
-	return 0;
-}
-
 void ObservationSequences::getFileList() {
 
 	string folderName = "D:/Aditya/CS_266/Project/Dataset/" + this->malwareFamilyName + "/";
