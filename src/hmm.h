@@ -5,7 +5,7 @@
 #include <string>
 #include <iostream>
 
-class hmm {
+class Hmm {
  public:
 	std::vector<std::vector<double>> alpha;
 	std::vector<std::vector<double>> beta;
@@ -14,9 +14,9 @@ class hmm {
 	std::vector<double> scale;
 	std::vector<int> obsv_symb;
 
-	hmm();
-	hmm(int /*num_states*/, int /*num_obsv_seq*/);
-	~hmm();
+	Hmm();
+	Hmm(int /*num_states*/, int /*num_obsv_seq*/);
+	~Hmm();
 
 	void setNumStates(int /*num_states*/);
 	int getNumStates();
@@ -43,6 +43,7 @@ class hmm {
 	void BackwardAlgorithm(const std::vector<int> &);
 	void CalculateGammas(const std::vector<int> &);
 	void Restimate(const std::vector<int> &);
+	double Score(const std::vector<int> &);
 
  private:
 	std::vector<std::vector<double>> state_trasition;
