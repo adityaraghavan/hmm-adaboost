@@ -23,7 +23,7 @@ ObservationSequences::ObservationSequences(std::string folderName)
 
 void ObservationSequences::getFileList() {
 
-	string folderName = "D:/Aditya/CS_266/Project/Dataset/" + this->malwareFamilyName + "/";
+	string folderName = "./input/dataset/" + this->malwareFamilyName + "/";
 	cout << folderName << endl;
 	bst::path p(folderName);
 	for (auto i = bst::directory_iterator(p); i != bst::directory_iterator(); i++)
