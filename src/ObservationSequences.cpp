@@ -13,16 +13,13 @@ ObservationSequences::~ObservationSequences()
 
 ObservationSequences::ObservationSequences(std::string folderName) 
 {
-
 	noOfFiles = 0;
-	noOfTrainingFiles = 0;
-	noOfScoringFiles = 0;
-	this->parentFolderPath = "D:/Aditya/CS_266/Project/Dataset/";
+	this->parentFolderPath = "./input/dataset/";
 	this->malwareFamilyName = folderName;
 }
 
-void ObservationSequences::getFileList() {
-
+void ObservationSequences::getFileList() 
+{
 	string folderName = this->parentFolderPath + this->malwareFamilyName + "/";
 	bst::path p(folderName);
 	for (auto i = bst::directory_iterator(p); i != bst::directory_iterator(); i++)
@@ -37,17 +34,16 @@ void ObservationSequences::getFileList() {
 
 void ObservationSequences::getFileStream() 
 {
-
 	this->noOfFiles = this->fileNameList.size();
-	this->noOfTrainingFiles = this->noOfFiles * 0.6 + 1;
 
 	this->getTrainingData();
 	this->getScoringData();
+	this->addBenignData();
 }
 
 void ObservationSequences::getTrainingData() 
 {
-	int lastIndex = this->noOfTrainingFiles;
+	int lastIndex = this->noOfFiles * 0.6 + 1;
 	for (int index = 0; index < lastIndex; index++)
 	{
 		vector<int> tempFileStream;
@@ -79,7 +75,7 @@ void ObservationSequences::getTrainingData()
 
 void ObservationSequences::getScoringData()
 {
-	int firstIndex = this->noOfTrainingFiles;
+	int firstIndex = this->noOfFiles * 0.6 + 1;
 	for (int index = firstIndex; index < this->noOfFiles; index++)
 	{
 		vector<int> tempFileStream;
@@ -106,16 +102,13 @@ void ObservationSequences::getScoringData()
 				tempFileStream.push_back(newOpCodeIndex);
 			}
 		}
-		this->scoringData.push_back(tempFileStream);
+		this->malwareData.push_back(tempFileStream);
 	}
-
-	addBenignData();
-	this->noOfScoringFiles = this->scoringData.size();
 }
 
-void ObservationSequences::addBenignData() {
-
-	string folderName = this->parentFolderPath + "/Benign/";
+void ObservationSequences::addBenignData() 
+{
+	string folderName = this->parentFolderPath + "/benign/";
 	bst::path p(folderName);
 	for (auto i = bst::directory_iterator(p); i != bst::directory_iterator(); i++)
 	{
@@ -127,8 +120,8 @@ void ObservationSequences::addBenignData() {
 	}
 }
 
-void ObservationSequences::getBenignData(string fullFileName) {
-
+void ObservationSequences::getBenignData(string fullFileName) 
+{
 	vector<int> tempFileStream;
 
 	ifstream tempReadFile;
@@ -152,5 +145,5 @@ void ObservationSequences::getBenignData(string fullFileName) {
 			tempFileStream.push_back(newOpCodeIndex);
 		}
 	}
-	this->scoringData.push_back(tempFileStream);
+	this->benignData.push_back(tempFileStream);
 }
