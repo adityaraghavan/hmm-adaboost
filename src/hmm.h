@@ -42,6 +42,7 @@ class Hmm {
 	void ForwardAlgorithm(const std::vector<int> &);
 	void BackwardAlgorithm(const std::vector<int> &);
 	void CalculateGammas(const std::vector<int> &);
+	void ScoringForwardAlgorithm(const std::vector<int>&);
 	void Restimate(const std::vector<int> &);
 	double Score(const std::vector<int> &);
 

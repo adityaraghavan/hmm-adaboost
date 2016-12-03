@@ -5,6 +5,8 @@
 #include <vector>
 #include <fstream>
 #include "boost\progress.hpp"
+#include <math.h>
+#include <float.h>
 
 using namespace std;
 
@@ -13,10 +15,17 @@ vector<vector<double>> GetRandomVector(int, int);
 void main()
 {
 	int num_models = 1;
-	int iter = 100;
+	int iter = 3;
 	vector<double> row;
 	string malwarename;
 
+	if (remove("out.txt") != 0) {
+		perror("Error deleting file");
+	}
+	else 
+	{
+		puts("File successfully deleted");
+	}
 	/*cout << "Enter Number of HMM models to be created - ";
 	cin >> num_models;*/
 
@@ -67,42 +76,42 @@ void main()
 
 		//Initialize B
 		model[i].setObsvProbab(GetRandomVector(rand(), model[i].getNumObsvSeq()));
-		model[i].printObsvProbab();
+		//model[i].printObsvProbab();
 
 		boost::progress_display progress(iter);
 		for (int it = 0; it < iter; it++)
 		{
-			model[it].ForwardAlgorithm(obseq.trainingData);
-			model[it].BackwardAlgorithm(obseq.trainingData);
-			model[it].CalculateGammas(obseq.trainingData);
-			model[it].Restimate(obseq.trainingData);
-			model[it].printInitDist();
-			model[it].printStateTransition();
+			model[i].ForwardAlgorithm(obseq.trainingData);
+			model[i].BackwardAlgorithm(obseq.trainingData);
+			model[i].CalculateGammas(obseq.trainingData);
+			model[i].Restimate(obseq.trainingData);
+			model[i].printStateTransition();
+			model[i].printInitDist();
 			++progress;
 		}
-
+		cout << "Training complete!\n";
 		ofstream out("out.txt");
-		streambuf *coutbuf = std::cout.rdbuf(); //save old buf
+		streambuf *coutbuf = cout.rdbuf(); //save old buf
 		cout.rdbuf(out.rdbuf());
 
-		cout << "\nTesting malware samples: \n";
+		cout << "\nTesting malware samples: \n" << flush;
 		// Test Malware
 		int test_size = obseq.malwareData.size();
 		vector<double> test_malscore;
 		for (int j = 0; j < test_size; j++)
 		{
 			test_malscore.push_back(model[i].Score(obseq.malwareData.at(j)));
-			cout << test_malscore.back() << "\n";
+			cout << test_malscore.back() << "\n" << flush;
 		}
 
-		cout << "\nTesting benign samples: \n";
+		cout << "\nTesting benign samples: \n" << flush;
 		//Test Benign
 		test_size = obseq.benignData.size();
 		vector<double> test_benscore;
 		for (int j = 0; j < test_size; j++)
 		{
 			test_benscore.push_back(model[i].Score(obseq.benignData.at(j)));
-			cout << test_benscore.back() << "\n";
+			cout << test_benscore.back() << "\n" << flush;
 		}
 
 

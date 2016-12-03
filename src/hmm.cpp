@@ -1,6 +1,8 @@
 #include "hmm.h"
 #include <iostream>
 #include <iterator>
+#include <math.h>
+#include <float.h>
 
 Hmm::Hmm()
 {
@@ -129,9 +131,11 @@ std::ostream & operator<<(std::ostream & out, const std::vector<std::vector<T>>&
 void Hmm::ForwardAlgorithm(const std::vector<int>& obsv)
 {
 	//initialize scale
+	this->scale.clear();
 	this->scale.resize(obsv.size(), 0);
 	
 	//initialize alpha
+	this->alpha.clear();
 	this->alpha.resize(obsv.size(), std::vector<double>(this->num_states, 0));
 
 	// Compute alpha(0)
@@ -143,6 +147,11 @@ void Hmm::ForwardAlgorithm(const std::vector<int>& obsv)
 	
 	//scale alpha(0)(i)
 	this->scale[0] = 1 / this->scale[0];
+	if (_isnan(this->scale[0]))
+	{
+		this->scale[0] = 0;
+	}
+	
 	for (int i = 0; i < this->num_states; i++)
 	{	
 		this->alpha[0][i] = this->scale[0] * this->alpha[0][i];
@@ -157,7 +166,7 @@ void Hmm::ForwardAlgorithm(const std::vector<int>& obsv)
 
 			for (int j = 0; j < this->num_states; j++)
 			{
-				this->alpha[t][i] = this->alpha[t][i] + this->alpha[t - 1][j] * this->state_trasition[j][i];
+				this->alpha[t][i] = this->alpha[t][i] + (this->alpha[t - 1][j] * this->state_trasition[j][i]);
 			}
 
 			this->alpha[t][i] = this->alpha[t][i] * this->obsv_probab[i][obsv[t]];
@@ -165,6 +174,10 @@ void Hmm::ForwardAlgorithm(const std::vector<int>& obsv)
 		}		
 
 		this->scale[t] = 1 / this->scale[t];
+		if (_isnan(this->scale[0]))
+		{
+			this->scale[0] = 0;
+		}
 		for (int i = 0; i < this->num_states; i++)
 		{
 			this->alpha[t][i] = this->scale[t] * this->alpha[t][i];
@@ -176,6 +189,7 @@ void Hmm::ForwardAlgorithm(const std::vector<int>& obsv)
 void Hmm::BackwardAlgorithm(const std::vector<int>& obsv)
 {
 	//resize beta
+	this->beta.clear();
 	this->beta.resize(obsv.size(), std::vector<double> (this->num_states, 0));
 
 	// Initialize and scale beta(T-1)
@@ -201,6 +215,8 @@ void Hmm::BackwardAlgorithm(const std::vector<int>& obsv)
 
 void Hmm::CalculateGammas(const std::vector<int>& obsv)
 {
+	this->gamma.clear();
+	this->digamma.clear();
 	this->gamma.resize(obsv.size(), std::vector<double>(this->num_states, 0));
 	this->digamma.resize(obsv.size(), std::vector<std::vector<double>>(this->num_states, std::vector<double>(this->num_states, 0)));
 	double denom = 0;
@@ -243,6 +259,35 @@ void Hmm::CalculateGammas(const std::vector<int>& obsv)
 	}
 }
 
+void Hmm::ScoringForwardAlgorithm(const std::vector<int>& obsv)
+{
+	//initialize alpha
+	this->alpha.clear();
+	this->alpha.resize(obsv.size(), std::vector<double>(this->num_states, 0));
+
+	// Compute alpha(0)
+	for (int i = 0; i < this->num_states; i++)
+	{
+		this->alpha[0][i] = this->init_dist.at(i) * this->obsv_probab[i][obsv[0]];
+	}
+
+	// Calculate alpha(t)
+	for (int t = 1; t < obsv.size(); t++)
+	{
+		for (int i = 0; i < this->num_states; i++)
+		{
+			//this->alpha[t][i] = 0;
+
+			for (int j = 0; j < this->num_states; j++)
+			{
+				this->alpha[t][i] = this->alpha[t][i] + (this->alpha[t - 1][j] * this->state_trasition[j][i]);
+			}
+
+			this->alpha[t][i] = this->alpha[t][i] * this->obsv_probab[i][obsv[t]];
+		}
+	}
+}
+
 void Hmm::Restimate(const std::vector<int>& obsv)
 {
 	double numer, denom;
@@ -274,8 +319,8 @@ void Hmm::Restimate(const std::vector<int>& obsv)
 	{
 		for (int j = 0; j < this->num_obsv_seq; j++)
 		{
-			numer = 0;
-			denom = 0;
+			numer = 0.0;
+			denom = 0.0;
 
 			for (int t = 0; t < obsv.size(); t++)
 			{
