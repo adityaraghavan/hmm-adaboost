@@ -16,8 +16,10 @@ public:
 	void getFileList();
 	std::vector<std::string> fileNameList;
 
-	void getFileStream();
+
 	std::vector<std::string> distinctOpCodesList;
+	std::vector<int> distinctOpCodesCount;
+	void getFileStream();
 
 	void getTrainingData();
 	std::vector<int> trainingData;
@@ -28,4 +30,9 @@ public:
 	void addBenignData();
 	void getBenignData(std::string);
 	std::vector<std::vector<int>> benignData;
+
+	std::vector<int> sortedOpCodesIndexes;
+	void sortOpCodes();
+	void updateFileStream(std::vector<int> &);
+	void updateScoringData();
 };
