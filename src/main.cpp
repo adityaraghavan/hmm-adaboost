@@ -52,7 +52,7 @@ void main()
 		
 		// set n & m
 		model[i].setNumStates(2);
-		model[i].setNumObsvSeq(obseq.distinctOpCodesList.size());
+		model[i].setNumObsvSeq(51);
 
 		//initialize pi
 		temp.push_back(row[i]);
