@@ -6,7 +6,7 @@
 #include <fstream>
 #include "boost\progress.hpp"
 #include <math.h>
-#include <float.h>
+#include <time.h>
 
 using namespace std;
 
@@ -14,8 +14,12 @@ vector<vector<double>> GetRandomVector(int, int);
 
 void main()
 {
+	clock_t clkStart;
+	clock_t clkFinish;
+	clkStart = clock();
+
 	int num_models = 1;
-	int iter = 3;
+	int iter = 100;
 	vector<double> row;
 	string malwarename;
 
@@ -85,11 +89,13 @@ void main()
 			model[i].BackwardAlgorithm(obseq.trainingData);
 			model[i].CalculateGammas(obseq.trainingData);
 			model[i].Restimate(obseq.trainingData);
-			model[i].printStateTransition();
-			model[i].printInitDist();
+			//model[i].printStateTransition();
+			//model[i].printInitDist();
 			++progress;
 		}
 		cout << "Training complete!\n";
+		cout << "Testing Initialized!\n";
+
 		ofstream out("out.txt");
 		streambuf *coutbuf = cout.rdbuf(); //save old buf
 		cout.rdbuf(out.rdbuf());
@@ -116,7 +122,8 @@ void main()
 
 
 	}
-
+	clkFinish = clock();
+	cout << clkFinish - clkStart;
 	system("pause");
 	//Adaboost boost(noOfModels, obSeq.malwareData.size(), obSeq.benignData.size());
 	//boost.boostingAlgorithm();

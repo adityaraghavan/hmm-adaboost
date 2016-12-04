@@ -147,7 +147,7 @@ void Hmm::ForwardAlgorithm(const std::vector<int>& obsv)
 	
 	//scale alpha(0)(i)
 	this->scale[0] = 1 / this->scale[0];
-	if (_isnan(this->scale[0]))
+	if (_isnan(this->scale[0]) || isinf(this->scale[0]))
 	{
 		this->scale[0] = 0;
 	}
@@ -174,9 +174,9 @@ void Hmm::ForwardAlgorithm(const std::vector<int>& obsv)
 		}		
 
 		this->scale[t] = 1 / this->scale[t];
-		if (_isnan(this->scale[0]))
+		if (_isnan(this->scale[t]) || isinf(this->scale[t]))
 		{
-			this->scale[0] = 0;
+			this->scale[t] = 0;
 		}
 		for (int i = 0; i < this->num_states; i++)
 		{
