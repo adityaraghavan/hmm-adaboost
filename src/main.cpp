@@ -56,7 +56,7 @@ void main()
 		
 		// set n & m
 		model[i].setNumStates(2);
-		model[i].setNumObsvSeq(51);
+		model[i].setNumObsvSeq(81);
 
 		//initialize pi
 		temp.push_back(row[i]);

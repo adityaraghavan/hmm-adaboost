@@ -64,13 +64,13 @@ void ObservationSequences::updateFileStream(vector<int> &fileStream)
 	{
 		int opCodeIndex = fileStream[index];
 		int tempNewIndex = find(this->sortedOpCodesIndexes.begin(), this->sortedOpCodesIndexes.end(), opCodeIndex) - this->sortedOpCodesIndexes.begin();
-		if (tempNewIndex < 50)
+		if (tempNewIndex < 80)
 		{
 			fileStream[index] = tempNewIndex;
 		}
 		else 
 		{
-			fileStream[index] = 50;
+			fileStream[index] = 80;
 		}
 	}
 }
