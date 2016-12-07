@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include "boost\filesystem.hpp"
 #include "boost\progress.hpp"
 #include <math.h>
 #include <time.h>
@@ -18,19 +19,12 @@ void main()
 	clock_t clkFinish;
 	clkStart = clock();
 
-	int num_models = 1;
-	int iter = 300;
+	int num_models = 2;
+	int iter = 1;
 	vector<double> row;
 	string malwarename;
 	int dist_opcodes;
 
-	if (remove("out.txt") != 0) {
-		perror("Error deleting file");
-	}
-	else 
-	{
-		puts("File successfully deleted");
-	}
 	/*cout << "Enter Number of HMM models to be created - ";
 	cin >> num_models;*/
 
@@ -50,7 +44,7 @@ void main()
 	obseq.getFileList();
 	obseq.getFileStream();
 
-	Hmm model[1];
+	Hmm model[2];
 	
 	vector<double> temp;
 	vector< vector<double>> temp2;
@@ -85,10 +79,8 @@ void main()
 		//Initialize B
 		model[i].setObsvProbab(GetRandomVector(rand(), model[i].getNumObsvSeq()));
 		//model[i].printObsvProbab();
-		
-		//boost::progress_display progress(iter);
 
-		ofstream out("out.txt");
+		ofstream out("result/" + malwarename + "/out" + to_string(i) + ".txt");
 		streambuf *coutbuf = cout.rdbuf();
 		cout.rdbuf(out.rdbuf());
 
@@ -134,6 +126,9 @@ void main()
 			test_benscore.push_back(model[i].Score(obseq.benignData.at(j)));
 			cout << test_benscore.back() << "\n" << flush;
 		}
+
+		std::cout.rdbuf(coutbuf);
+		cout << "\nModel " + to_string(i) + " created! " + to_string(num_models - 1 - i) + " to go!\n";
 	}
 	clkFinish = clock();
 	cout << clkFinish - clkStart;
