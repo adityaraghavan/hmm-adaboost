@@ -19,9 +19,10 @@ void main()
 	clkStart = clock();
 
 	int num_models = 1;
-	int iter = 100;
+	int iter = 300;
 	vector<double> row;
 	string malwarename;
+	int dist_opcodes;
 
 	if (remove("out.txt") != 0) {
 		perror("Error deleting file");
@@ -39,10 +40,13 @@ void main()
 		row.push_back(u/100);
 	}
 	
-	cout << "enter malware family name - ";
+	cout << "Enter malware family name - ";
 	cin >> malwarename;
 
-	ObservationSequences obseq(malwarename);
+	cout << "Enter number of distinct opcodes to be considered - ";
+	cin >> dist_opcodes;
+
+	ObservationSequences obseq(malwarename, dist_opcodes);
 	obseq.getFileList();
 	obseq.getFileStream();
 
@@ -56,7 +60,7 @@ void main()
 		
 		// set n & m
 		model[i].setNumStates(2);
-		model[i].setNumObsvSeq(81);
+		model[i].setNumObsvSeq(dist_opcodes+1);
 
 		//initialize pi
 		temp.push_back(row[i]);
@@ -81,24 +85,35 @@ void main()
 		//Initialize B
 		model[i].setObsvProbab(GetRandomVector(rand(), model[i].getNumObsvSeq()));
 		//model[i].printObsvProbab();
+		
+		//boost::progress_display progress(iter);
 
-		boost::progress_display progress(iter);
+		ofstream out("out.txt");
+		streambuf *coutbuf = cout.rdbuf();
+		cout.rdbuf(out.rdbuf());
+
+		
 		for (int it = 0; it < iter; it++)
 		{
 			model[i].ForwardAlgorithm(obseq.trainingData);
 			model[i].BackwardAlgorithm(obseq.trainingData);
 			model[i].CalculateGammas(obseq.trainingData);
 			model[i].Restimate(obseq.trainingData);
-			//model[i].printStateTransition();
-			//model[i].printInitDist();
-			++progress;
+			if ((it + 1) % 50 == 0) 
+			{
+				model[i].printInitDist();
+				model[i].printStateTransition();
+				model[i].printObsvProbab();
+			}
+			//++progress;
 		}
+
+		model[i].printInitDist();
+		model[i].printStateTransition();
+		model[i].printObsvProbab();
+
 		cout << "Training complete!\n";
 		cout << "Testing Initialized!\n";
-
-		ofstream out("out.txt");
-		streambuf *coutbuf = cout.rdbuf(); //save old buf
-		cout.rdbuf(out.rdbuf());
 
 		cout << "\nTesting malware samples: \n" << flush;
 		// Test Malware
@@ -119,8 +134,6 @@ void main()
 			test_benscore.push_back(model[i].Score(obseq.benignData.at(j)));
 			cout << test_benscore.back() << "\n" << flush;
 		}
-
-
 	}
 	clkFinish = clock();
 	cout << clkFinish - clkStart;

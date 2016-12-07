@@ -3,7 +3,7 @@
 #include <iterator>
 #include <math.h>
 #include <float.h>
-
+#include <xtgmath.h>
 Hmm::Hmm()
 {
 
@@ -71,16 +71,25 @@ void Hmm::setObsvProbab(std::vector<std::vector<double>> B)
 
 void Hmm::printStateTransition()
 {
-	std::cout << this->state_trasition;
+	std::cout << "State Transition Matrix - " << std::endl;
+	std::cout << this->state_trasition << std::endl;;
 }
 
 void Hmm::printObsvProbab()
 {
-	std::cout << this->obsv_probab;
+	std::cout << "Observation Matrix - " << std::endl;
+	for (int i = 0; i < this->num_obsv_seq; i++) {
+		for (int j = 0; j < this->num_states; j++) {
+			std::cout << this->obsv_probab[j][i] << "\t";
+		}
+		std::cout << std::endl;
+	}
+
 }
 
 void Hmm::printInitDist()
 {
+	std::cout << std::endl << "Initial State Matrix - " << std::endl;
 	std::cout << this->init_dist;
 }
 
@@ -219,7 +228,7 @@ void Hmm::CalculateGammas(const std::vector<int>& obsv)
 	this->digamma.clear();
 	this->gamma.resize(obsv.size(), std::vector<double>(this->num_states, 0));
 	this->digamma.resize(obsv.size(), std::vector<std::vector<double>>(this->num_states, std::vector<double>(this->num_states, 0)));
-	double denom = 0;
+	double denom;
 
 	for (int t = 0; t < obsv.size()-1; t++)
 	{
@@ -237,7 +246,7 @@ void Hmm::CalculateGammas(const std::vector<int>& obsv)
 		}
 		for (int i = 0; i < this->num_states; i++)
 		{
-			this->gamma[t][i] = 0;
+		//	this->gamma[t][i] = 0;
 			for (int j = 0; j < this->num_states; j++)
 			{
 				this->digamma[t][i][j] = (this->alpha[t][i] * this->state_trasition[i][j] * this->obsv_probab[j][obsv[t + 1]] * this->beta[t + 1][j]);
@@ -256,35 +265,6 @@ void Hmm::CalculateGammas(const std::vector<int>& obsv)
 	for (int i = 0; i < this->num_states; i++)
 	{
 		this->gamma[obsv.size() - 1][i] = this->alpha[obsv.size() - 1][i] / denom;
-	}
-}
-
-void Hmm::ScoringForwardAlgorithm(const std::vector<int>& obsv)
-{
-	//initialize alpha
-	this->alpha.clear();
-	this->alpha.resize(obsv.size(), std::vector<double>(this->num_states, 0));
-
-	// Compute alpha(0)
-	for (int i = 0; i < this->num_states; i++)
-	{
-		this->alpha[0][i] = this->init_dist.at(i) * this->obsv_probab[i][obsv[0]];
-	}
-
-	// Calculate alpha(t)
-	for (int t = 1; t < obsv.size(); t++)
-	{
-		for (int i = 0; i < this->num_states; i++)
-		{
-			//this->alpha[t][i] = 0;
-
-			for (int j = 0; j < this->num_states; j++)
-			{
-				this->alpha[t][i] = this->alpha[t][i] + (this->alpha[t - 1][j] * this->state_trasition[j][i]);
-			}
-
-			this->alpha[t][i] = this->alpha[t][i] * this->obsv_probab[i][obsv[t]];
-		}
 	}
 }
 
@@ -342,10 +322,12 @@ double Hmm::Score(const std::vector<int>& test)
 	
 	double score = 0;
 
-	for (int i = 0; i < this->num_states; i++)
+	int fileSeqLength = test.size();
+	for (int i = 0; i < fileSeqLength; i++)
 	{
-		score = score + this->alpha[test.size() - 1][i];
+		score = score + log(this->scale[i]);
 	}
 
-	return score;
+	score = score / fileSeqLength;
+	return -score;
 }

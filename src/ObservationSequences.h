@@ -7,9 +7,10 @@ class ObservationSequences
 
 public:
 	~ObservationSequences();
-	ObservationSequences(std::string);
+	ObservationSequences(std::string, int);
 
 	int noOfFiles;
+	int dist_opcodes;
 	std::string malwareFamilyName;
 	std::string parentFolderPath;
 	
@@ -27,8 +28,8 @@ public:
 	void getScoringData();
 	std::vector<std::vector<int>> malwareData;
 
-	void addBenignData();
-	void getBenignData(std::string);
+	void getBenignData();
+	void addBenignData(std::string);
 	std::vector<std::vector<int>> benignData;
 
 	std::vector<int> sortedOpCodesIndexes;
