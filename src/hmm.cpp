@@ -4,6 +4,7 @@
 #include <math.h>
 #include <float.h>
 #include <xtgmath.h>
+#include <vector>
 Hmm::Hmm()
 {
 
@@ -115,7 +116,7 @@ std::ostream & operator<<(std::ostream & out, const std::vector<T>& vec)
 	if (!vec.empty()) {
 		out << '[';
 		std::copy(vec.begin(), vec.end(), std::ostream_iterator<T>(out, ", "));
-		out << "\b\b]";
+		out << "]";
 	}
 	out << "\n";
 	return out;
@@ -130,7 +131,7 @@ std::ostream & operator<<(std::ostream & out, const std::vector<std::vector<T>>&
 		if (!vec[i].empty()) {
 			out << '[';
 			std::copy(vec[i].begin(), vec[i].end(), std::ostream_iterator<T>(out, ", "));
-			out << "\b\b]";
+			out << "]";
 		}
 		out << "\n";
 	}

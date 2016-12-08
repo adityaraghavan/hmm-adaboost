@@ -4,8 +4,6 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
-#include "boost\filesystem.hpp"
-#include "boost\progress.hpp"
 #include <math.h>
 #include <time.h>
 
@@ -19,7 +17,7 @@ void main()
 	clock_t clkFinish;
 	clkStart = clock();
 
-	int num_models = 2;
+	int num_models = 20;
 	int iter = 1;
 	vector<double> row;
 	string malwarename;
@@ -44,7 +42,7 @@ void main()
 	obseq.getFileList();
 	obseq.getFileStream();
 
-	Hmm model[2];
+	Hmm model[20];
 	
 	vector<double> temp;
 	vector< vector<double>> temp2;
@@ -70,7 +68,7 @@ void main()
 		temp.clear();
 		temp.push_back(row[row.size() - 2 - (i * 2)]);
 		temp.push_back(1 - temp[0]);
-		temp2.push_back(temp);
+ 		temp2.push_back(temp);
 		temp.clear();
 		model[i].setStateTrans(temp2);
 		temp2.clear();
@@ -96,35 +94,31 @@ void main()
 				model[i].printInitDist();
 				model[i].printStateTransition();
 				model[i].printObsvProbab();
+
+				cout << "Training complete!\n";
+				cout << "Testing Initialized!\n";
+
+				cout << "\nTesting malware samples: \n" << flush;
+				// Test Malware
+				int test_size = obseq.malwareData.size();
+				vector<double> test_malscore;
+				for (int j = 0; j < test_size; j++)
+				{
+					test_malscore.push_back(model[i].Score(obseq.malwareData.at(j)));
+					cout << test_malscore.back() << "\n" << flush;
+				}
+
+				cout << "\nTesting benign samples: \n" << flush;
+				//Test Benign
+				test_size = obseq.benignData.size();
+				vector<double> test_benscore;
+				for (int j = 0; j < test_size; j++)
+				{
+					test_benscore.push_back(model[i].Score(obseq.benignData.at(j)));
+					cout << test_benscore.back() << "\n" << flush;
+				}
 			}
 			//++progress;
-		}
-
-		model[i].printInitDist();
-		model[i].printStateTransition();
-		model[i].printObsvProbab();
-
-		cout << "Training complete!\n";
-		cout << "Testing Initialized!\n";
-
-		cout << "\nTesting malware samples: \n" << flush;
-		// Test Malware
-		int test_size = obseq.malwareData.size();
-		vector<double> test_malscore;
-		for (int j = 0; j < test_size; j++)
-		{
-			test_malscore.push_back(model[i].Score(obseq.malwareData.at(j)));
-			cout << test_malscore.back() << "\n" << flush;
-		}
-
-		cout << "\nTesting benign samples: \n" << flush;
-		//Test Benign
-		test_size = obseq.benignData.size();
-		vector<double> test_benscore;
-		for (int j = 0; j < test_size; j++)
-		{
-			test_benscore.push_back(model[i].Score(obseq.benignData.at(j)));
-			cout << test_benscore.back() << "\n" << flush;
 		}
 
 		std::cout.rdbuf(coutbuf);
